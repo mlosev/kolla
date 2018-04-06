@@ -343,6 +343,12 @@ class PushTask(DockerTask):
         if dc_running_ver < StrictVersion('3.0.0'):
             kwargs['insecure_registry'] = True
 
+        if self.conf.registry_user and self.conf.registry_password:
+            kwargs['auth_config'] = {
+                'username': self.conf.registry_user,
+                'password': self.conf.registry_password,
+            }
+
         for response in self.dc.push(image.canonical_name, **kwargs):
             stream = json.loads(response)
             if 'stream' in stream:
@@ -709,13 +715,6 @@ class KollaWorker(object):
 
         docker_kwargs = docker.utils.kwargs_from_env()
         self.dc = docker.APIClient(version='auto', **docker_kwargs)
-
-        if not self.registry:
-            return
-        if not (conf.registry_user and conf.registry_password):
-            return
-        self.dc.login(conf.registry_user, password=conf.registry_password,
-                      registry=self.registry, reauth=True)
 
     def _get_images_dir(self):
         possible_paths = (
