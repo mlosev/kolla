@@ -226,6 +226,12 @@ _CLI_OPTS = [
     cfg.StrOpt('registry',
                help=('The docker registry host. The default registry host'
                      ' is Docker Hub')),
+    cfg.StrOpt('registry-user',
+               help=('The docker registry user. Used when your registry host '
+                     'requires authentication')),
+    cfg.StrOpt('registry-password',
+               help=('The docker registry password. Used when your registry '
+                     'host requires authentication')),
     cfg.StrOpt('save-dependency',
                help=('Path to the file to store the docker image'
                      ' dependency in Graphviz dot format')),

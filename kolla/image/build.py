@@ -710,6 +710,13 @@ class KollaWorker(object):
         docker_kwargs = docker.utils.kwargs_from_env()
         self.dc = docker.APIClient(version='auto', **docker_kwargs)
 
+        if not self.registry:
+            return
+        if not (conf.registry_user and conf.registry_password):
+            return
+        self.dc.login(conf.registry_user, password=conf.registry_password,
+                      registry=self.registry, reauth=True)
+
     def _get_images_dir(self):
         possible_paths = (
             PROJECT_ROOT,
